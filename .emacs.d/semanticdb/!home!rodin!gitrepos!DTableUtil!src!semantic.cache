@@ -1,0 +1,225 @@
+;; Object semanticdb-project-database-file
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "semanticdb-project-database-file"
+  :tables
+  (list
+    (semanticdb-table "semanticdb-table"
+      :major-mode c-mode
+      :tags 
+        '( ("CONSTANTS_H" variable (:constant-flag t) nil [29 40])
+            ("DEBUG" variable (:constant-flag t) nil [50 55])
+            ("NUMERIC_CHARS" variable
+               (:dereference 1
+                :constant-flag t
+                :default-value "\"-0.123456789eE+\""
+                :type "char")
+                nil [57 104])
+            ("B_INIT_SHEET_COUNT" variable (:constant-flag t) nil [114 132])
+            ("B_INIT_COLUMN_COUNT" variable (:constant-flag t) nil [143 162])
+            ("B_INIT_ROW_COUNT" variable (:constant-flag t) nil [173 189])
+            ("BUF_INIT_LINE_COUNT" variable (:constant-flag t) nil [204 223])
+            ("BUF_INIT_LINE_LEN" variable (:constant-flag t) nil [237 254])
+            ("PARSER_NCOLS" variable (:constant-flag t) nil [268 280])
+            ("PARSER_BUF_LEN" variable (:constant-flag t) nil [292 306]))          
+      :file "constants.h"
+      :pointmax 317
+      :fsize 333
+      :lastmodtime '(24374 43695 531714 146000)
+      :unmatched-syntax nil
+      :lexical-table 
+        '(("B_INIT_SHEET_COUNT" . ((number "1" 133 . 134)))
+          ("PARSER_BUF_LEN" . ((number "40" 307 . 309)))
+          ("B_INIT_COLUMN_COUNT" . ((number "6" 163 . 164)))
+          ("CONSTANTS_H")
+          ("B_INIT_ROW_COUNT" . ((number "1000" 190 . 194)))
+          ("BUF_INIT_LINE_COUNT" . ((number "1000" 224 . 228)))
+          ("DEBUG")
+          ("BUF_INIT_LINE_LEN" . ((number "100" 255 . 258)))
+          ("PARSER_NCOLS" . ((number "40" 281 . 283)))
+          )
+)
+    (semanticdb-table "semanticdb-table"
+      :major-mode c-mode
+      :tags 
+        '( ("BOOK_H" variable (:constant-flag t) nil [265 271])
+            ("stdlib.h" include (:system-flag t) nil [272 291])
+            ("book_t" type
+               (:members 
+                  ( ("start" variable
+                       (:pointer 3
+                        :type "float")
+                        (reparse-symbol classsubparts) [383 399])
+                    ("columns_allocated" variable
+                       (:pointer 1
+                        :type ("size_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [449 477])
+                    ("columns_used" variable
+                       (:pointer 1
+                        :type ("size_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [526 549])
+                    ("rows_allocated" variable
+                       (:pointer 1
+                        :type ("size_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [568 593])
+                    ("rows_used" variable
+                       (:pointer 1
+                        :type ("size_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [610 630])
+                    ("sheet_count" variable
+                       (:pointer 1
+                        :type ("size_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [652 674]))                  
+                :type "struct")
+                nil [293 783])
+            ("book_t" type
+               (:typedef ("book_t" type (:type "struct") nil nil)
+                :type "typedef")
+                nil [293 783])
+            ("stringBuffer_t" type
+               (:members 
+                  ( ("start" variable
+                       (:pointer 2
+                        :type "char")
+                        (reparse-symbol classsubparts) [822 837])
+                    ("line_length" variable
+                       (:pointer 1
+                        :type ("size_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [842 863])
+                    ("line_count" variable
+                       (:pointer 1
+                        :type ("size_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [868 888]))                  
+                :type "struct")
+                nil [786 906])
+            ("stringBuffer_t" type
+               (:typedef ("stringBuffer_t" type (:type "struct") nil nil)
+                :type "typedef")
+                nil [786 906])
+            ("Ncols" variable (:type ("size_t" type (:type "class") nil nil)) nil [988 1002])
+            ("parsedLine_t" variable (:type "int") nil [1005 1018]))          
+      :file "book.h"
+      :pointmax 1945
+      :fsize 2008
+      :lastmodtime '(24374 43693 591714 276000)
+      :unmatched-syntax nil
+      :lexical-table 
+        '(("BOOK_H")
+          )
+)
+    (semanticdb-table "semanticdb-table"
+      :major-mode c-mode
+      :tags 
+        '( ("book.h" include nil nil [44 61])
+            ("constants.h" include nil nil [62 84])
+            ("string.h" include (:system-flag t) nil [85 104])
+            ("stdio.h" include (:system-flag t) nil [105 123])
+            ("stdlib.h" include (:system-flag t) nil [124 143])
+            ("book_init" function
+               (:arguments 
+                  ( ("sheets" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [162 176])
+                    ("rows" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [177 189])
+                    ("columns" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [190 205]))                  
+                :type ("book_t" type (:type "class") nil nil))
+                nil [145 2024])
+            ("book_addSheet" function
+               (:arguments 
+                  ( ("book" variable (:type ("book_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2048 2060])
+                    ("columns" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2061 2076])
+                    ("rows" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2077 2089]))                  
+                :type ("book_t" type (:type "class") nil nil))
+                nil [2027 3842])
+            ("book_expandSheet" function
+               (:arguments 
+                  ( ("book" variable (:type ("book_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3869 3881])
+                    ("sheet_index" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3882 3901])
+                    ("columns" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3902 3917])
+                    ("rows" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3918 3930]))                  
+                :type ("book_t" type (:type "class") nil nil))
+                nil [3845 4960])
+            ("book_delete" function
+               (:arguments 
+                  ( ("book" variable (:type ("book_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4980 4992]))                  
+                :type "void")
+                nil [4963 5447])
+            ("strBuf_init" function
+               (:arguments 
+                  ( ("line_length" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5476 5495])
+                    ("line_count" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5496 5514]))                  
+                :type ("stringBuffer_t" type (:type "class") nil nil))
+                nil [5449 6614])
+            ("strBuf_resize" function
+               (:arguments 
+                  ( ("buffer" variable (:type ("stringBuffer_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6645 6667])
+                    ("line_length" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6668 6687])
+                    ("line_count" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6688 6706]))                  
+                :type ("stringBuffer_t" type (:type "class") nil nil))
+                nil [6616 7346])
+            ("strBuf_delete" function
+               (:arguments 
+                  ( ("buffer" variable (:type ("stringBuffer_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [7367 7389]))                  
+                :type "void")
+                nil [7348 7616])
+            ("fileToStrBuf" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("filename" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [7647 7668]))                  
+                :type ("stringBuffer_t" type (:type "class") nil nil))
+                nil [7619 7669])
+            ("strBufToFile" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("strBuf" variable (:type ("stringBuffer_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [8220 8242])
+                    ("filename" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [8243 8264]))                  
+                :type "int")
+                nil [8203 8265])
+            ("column_parser" function
+               (:arguments 
+                  ( ("str" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [8526 8542])
+                    ("delimiters" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [8543 8566]))                  
+                :type ("parsedLine_t" type (:type "class") nil nil))
+                nil [8499 12476]))          
+      :file "book.c"
+      :pointmax 12477
+      :fsize 12904
+      :lastmodtime '(24376 11589 987280 400000)
+      :unmatched-syntax nil)
+    (semanticdb-table "semanticdb-table"
+      :major-mode c-mode
+      :tags 
+        '( ("constants.h" include nil nil [1 23])
+            ("book.h" include nil nil [24 41])
+            ("stdlib.h" include (:system-flag t) nil [43 62])
+            ("main" function
+               (:arguments 
+                  ( ("argc" variable (:type "int") (reparse-symbol arg-sub-list) [73 82])
+                    ("argv" variable
+                       (:pointer 1
+                        :dereference 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [83 96]))                  
+                :type "int")
+                nil [64 785]))          
+      :file "main.c"
+      :pointmax 785
+      :fsize 810
+      :lastmodtime '(24345 53721 275683 544000)
+      :unmatched-syntax nil))
+  :file "!home!rodin!gitrepos!DTableUtil!src!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")
