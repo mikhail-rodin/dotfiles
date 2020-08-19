@@ -1,13 +1,7 @@
-;; remove all keybindings from insert-state keymap
-;;(setcdr evil-insert-state-map nil)
-;; but [escape] should switch back to normal state
-;;(define-key evil-insert-state-map [escape] 'evil-normal-state)
-
-;;(require 'use-package)
-
-;;
-;; Aesthetics
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; My name and e-mail adress
+(setq user-full-name   "Mikhail Rodin")
+(setq user-mail-adress "mihail.rodin.98@gmail.com")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -20,34 +14,22 @@
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(custom-enabled-themes (quote (deeper-blue)))
  '(package-selected-packages (quote (evil-visual-mark-mode slime))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic Functionality
-;;
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq x-select-enable-clipboard t)
-
-(use-package which-key
-  :ensure t)
-
-;(setq mouse-wheel-scroll-amount '(0.07))
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq mouse-wheel-progressive-speed nil)
-(setq scroll-step 1)
-
-;; MELPA package manager
+(require 'use-package)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
 ;; and `package-pinned-packages`. Most users will not need or want to do this.
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; OS-dependant config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun system-is-linux()
     (string-equal system-type "gnu/linux"))
@@ -78,40 +60,13 @@
     (setq unix-init-slime-path   "/usr/share/common-lisp/source/slime/")
     (setq unix-init-ac-dict-path "~/.emacs.d/plugins/auto-complete/dict"))
 
-;; My name and e-mail adress
-(setq user-full-name   "Mikhail Rodin")
-(setq user-mail-adress "mihail.rodin.98@gmail.com")
-
-;; Imenu
-(require 'imenu)
-(setq imenu-auto-rescan      t) ;; автоматически обновлять список функций в буфере
-(setq imenu-use-popup-menu nil) ;; диалоги Imenu только в минибуфере
-(global-set-key (kbd "<f6>") 'imenu) ;; вызов Imenu на F6
-
-;; Display the name of the current buffer in the title bar
-(setq frame-title-format "GNU Emacs: %b")
-
-;; Load path for plugins
+; Load path for plugins
 (if (system-is-windows)
     (add-to-list 'load-path win-init-path)
   (add-to-list 'load-path unix-init-path))
 
-;; Inhibit startup/splash screen
-(setq inhibit-splash-screen   t)
-(setq ingibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; org-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil))) ;; line wrap on
-
-
-;; Show-paren-mode settings
-;;(show-paren-mode t) ;; включить выделение выражений между {},[],()
-;;(setq show-paren-style 'expression) ;; выделить цветом выражения между {},[],()
-
 ;; Coding-system settings
-(set-language-environment 'UTF-8)
+(set-language -environment 'UTF-8)
 (if (system-is-linux) ;; для GNU/Linux кодировка utf-8, для MS Windows - windows-1251
     (progn
         (setq default-buffer-file-coding-system 'utf-8)
@@ -130,91 +85,22 @@
         (setq-default coding-system-for-read    'windows-1251)
         (setq default-buffer-file-coding-system 'windows-1251)))
 
-;; Linum plugin
-;; (require 'linum) ;; вызвать Linum
-;;(line-number-mode   t) ;; показать номер строки в mode-line
-;;(global-linum-mode  t) ;; показывать номера строк во всех буферах
-;;(column-number-mode t) ;; показать номер столбца в mode-line
-;;(setq linum-format " %d") ;; задаем формат нумерации строк
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; menus and UI
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Line wrapping
-(setq word-wrap          t) ;; переносить по словам
-(global-visual-line-mode t)
+(tool-bar-mode -1)
+(menu-bar-mode 1)
+(setq frame-title-format "GNU Emacs: %b") ;; Display the name of the current buffer in the title bar
+
+(global-set-key (kbd "M-x") 'helm-M-x) ;; use helm M-x with autocomplete instead
+(global-set-key (kbd "C-i") 'helm-info)
 
 ;; Buffer Selection and ibuffer settings
 (require 'bs)
 (require 'ibuffer)
 (defalias 'list-buffers 'ibuffer) ;; отдельный список буферов при нажатии C-x C-b
 (global-set-key (kbd "<f2>") 'bs-show) ;; запуск buffer selection кнопкой F2
-
-;; Indent settings
-(setq-default indent-tabs-mode nil) ;; отключить возможность ставить отступы TAB'ом
-(setq-default tab-width          4) ;; ширина табуляции - 4 пробельных символа
-(setq-default c-basic-offset     4)
-(setq-default standart-indent    4) ;; стандартная ширина отступа - 4 пробельных символа
-(setq-default lisp-body-indent   4) ;; сдвигать Lisp-выражения на 4 пробельных символа
-(global-set-key (kbd "RET") 'newline-and-indent) ;; при нажатии Enter перевести каретку и сделать отступ
-(setq lisp-indent-function  'common-lisp-indent-function)
-
-;; Scrolling settings
-(setq scroll-step               1) ;; вверх-вниз по 1 строке
-(setq scroll-margin            10) ;; сдвигать буфер верх/вниз когда курсор в 10 шагах от верхней/нижней границы
-(setq scroll-conservatively 10000)
-
-;; Short messages
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; End of file newlines
-(setq require-final-newline    t) ;; добавить новую пустую строку в конец файла при сохранении
-(setq next-line-add-newlines nil) ;; не добавлять новую строку в конец при смещении курсора  стрелками
-
-;; Highlight search results
-(setq search-highlight        t)
-(setq query-replace-highlight t)
-
-
-;; Easy transition between buffers: M-arrow-keys
-(if (equal nil (equal major-mode 'org-mode))
-    (windmove-default-keybindings 'meta))
-
-;; Delete trailing whitespaces, format buffer and untabify when save buffer
-(defun untabify-current-buffer()
-    (if (not indent-tabs-mode)
-        (untabify (point-min) (point-max)))
-    nil)
-(add-to-list 'write-file-functions 'untabify-current-buffer)
-(add-to-list 'write-file-functions 'delete-trailing-whitespace)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGE: workgroups2               ;;
-;;                                    ;;
-;; GROUP: Convenience -> Workgroups   ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'workgroups2)
-;; Change some settings
-(workgroups-mode 1)
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package: undo-tree                  ;;
-;;                                     ;;
-;; GROUP: Editing -> Undo -> Undo Tree ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'undo-tree)
-(global-undo-tree-mode)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package: yasnippet                 ;;
-;;                                    ;;
-;; GROUP: Editing -> Yasnippet        ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'yasnippet)
-(yas-global-mode 1)
-
-;;;;;;
-;; ibuffer
-;;;;
 (add-hook 'ibuffer-hook
           (lambda ()
             (ibuffer-vc-set-filter-groups-by-vc-root)
@@ -233,12 +119,97 @@
               " "
               filename-and-process)))
 
-;;;;;;;;;;;;
-;; xah-lookup - lookup docs on WWW
-;;;;;;;;;;;
+;; Imenu
+(require 'imenu)
+(setq imenu-auto-rescan      t) ;; автоматически обновлять список функций в буфере
+(setq imenu-use-popup-menu t) ;; диалоги Imenu только в минибуфере
+(global-set-key (kbd "<f6>") 'imenu) ;; вызов Imenu на F6
 
+;(setq mouse-wheel-scroll-amount '(0.07))
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(setq mouse-wheel-progressive-speed nil)
+(setq scroll-step 1)
+
+;; Inhibit startup/splash screen
+(setq inhibit-splash-screen   t)
+(setq ingibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
+
+;; Scrolling settings
+(setq scroll-step               1) ;; вверх-вниз по 1 строке
+(setq scroll-margin            10) ;; сдвигать буфер верх/вниз когда курсор в 10 шагах от верхней/нижней границы
+(setq scroll-conservatively 10000)
+
+;; Short messages
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Highlight search results
+(setq search-highlight        t)
+(setq query-replace-highlight t)
+
+;; Easy transition between buffers: M-arrow-keys
+(if (equal nil (equal major-mode 'org-mode))
+    (windmove-default-keybindings 'meta))
+
+(use-package which-key  ;; show keybindings
+    :ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; org-mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil))) ;; line wrap on
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; text processing
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Line wrapping
+(setq word-wrap          t) ;; переносить по словам
+(global-visual-line-mode t)
+
+;; Indent settings
+(setq-default indent-tabs-mode nil) ;; отключить возможность ставить отступы TAB'ом
+(setq-default tab-width          4) ;; ширина табуляции - 4 пробельных символа
+(setq-default c-basic-offset     4)
+(setq-default standart-indent    4) ;; стандартная ширина отступа - 4 пробельных символа
+(setq-default lisp-body-indent   4) ;; сдвигать Lisp-выражения на 4 пробельных символа
+(global-set-key (kbd "RET") 'newline-and-indent) ;; при нажатии Enter перевести каретку и сделать отступ
+(setq lisp-indent-function  'common-lisp-indent-function)
+
+;; End of file newlines
+(setq require-final-newline    t) ;; добавить новую пустую строку в конец файла при сохранении
+(setq next-line-add-newlines nil) ;; не добавлять новую строку в конец при смещении курсора  стрелками
+
+;; Delete trailing whitespaces, format buffer and untabify when save buffer
+(defun untabify-current-buffer()
+    (if (not indent-tabs-mode)
+        (untabify (point-min) (point-max)))
+    nil)
+(add-to-list 'write-file-functions 'untabify-current-buffer)
+(add-to-list 'write-file-functions 'delete-trailing-whitespace)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; PACKAGE: workgroups2               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'workgroups2)
+;; Change some settings
+(workgroups-mode 1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package: undo-tree                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'undo-tree)
+(global-undo-tree-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package: yasnippet                 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; xah-lookup - lookup docs on WWW    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(setq xah-lookup-browser-function 'eww)
-
 (defun xah-lookup-cppreference (&optional @word)
   "Lookup definition of current word or text selection in URL."
   (interactive)
@@ -248,16 +219,12 @@
    ;; Use word02051 as a placeholder in the query URL.
    "http://en.cppreference.com/mwiki/index.php?search=word02051"
    'browse-url))
-
 (require 'cc-mode)
-
 ;; Add shortcut for c++-mode
 (define-key c++-mode-map (kbd "C-c d") #'xah-lookup-cppreference)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: volatile-highlights          ;;
-;;                                       ;;
-;; GROUP: Editing -> Volatile Highlights ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -273,7 +240,6 @@
 ;; Helm config loading & helm-gtags config
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'setup-helm)
-
 (require 'helm-gtags)
 ;;; Enable helm-gtags-mode
 (add-hook 'c-mode-hook 'helm-gtags-mode)
@@ -288,13 +254,38 @@
  helm-gtags-suggested-key-mapping t
  )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LSP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;(require 'lsp-mode)
+;;(add-hook 'prog-mode-hook #'lsp)
+;;(add-hook 'c-mode-hook #'lsp)
+;;(add-hook 'c++-mode-hook #'lsp)
+;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+(setq lsp-keymap-prefix "s-l")
+
+(use-package lsp-mode
+    :hook (
+            (c-mode . lsp)
+            (c++-mode . lsp)
+            (python-mode . lsp)
+            ;; if you want which-key integration
+            ;;(lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp)
+
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; IDE tools
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; sr-speedbar
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'c-mode-hook 'sr-speedbar-open)
 (add-hook 'c++-mode-hook 'sr-speedbar-open)
 (add-hook 'asm-mode-hook 'sr-speedbar-open)
-
 
 (require 'function-args)
 ;; provides moo-jump-local (search func name and jump to it)
@@ -303,32 +294,29 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)) ;; Put c++-mode as default for *.h files (improves parsing):
 (set-default 'semantic-case-fold t) ;; case-insensitive enabled
 
-
-
-(require 'helm-gtags)
+;;(require 'helm-gtags)
 ;; Enable helm-gtags-mode
-(add-hook 'dired-mode-hook 'helm-gtags-mode)
-(add-hook 'eshell-mode-hook 'helm-gtags-mode)
-(add-hook 'c-mode-hook 'helm-gtags-mode)
-(add-hook 'c++-mode-hook 'helm-gtags-mode)
-(add-hook 'asm-mode-hook 'helm-gtags-mode)
+;;(add-hook 'dired-mode-hook 'helm-gtags-mode)
+;;(add-hook 'eshell-mode-hook 'helm-gtags-mode)
+;;(add-hook 'c-mode-hook 'helm-gtags-mode)
+;;(add-hook 'c++-mode-hook 'helm-gtags-mode)
+;;(add-hook 'asm-mode-hook 'helm-gtags-mode)
 
-(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
-(define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
-(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+;;(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+;;(define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+;;(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+;;(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+;;(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+;;(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; company
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends (delete 'company-semantic company-backends))
-(define-key c-mode-map  [(tab)] 'company-complete)
-(define-key c++-mode-map  [(tab)] 'company-complete)
-
+;;(setq company-backends (delete 'company-semantic company-backends))
+;;(define-key c-mode-map  [(tab)] 'company-complete)
+;;(define-key c++-mode-map  [(tab)] 'company-complete)
 
 ;;::::::::::::::::::::::::::::::::::
 ;; Language-specific settings
@@ -337,24 +325,16 @@
 (setq c-default-style "linux"
           c-basic-offset 4)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CEDET
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'cc-mode)
-(require 'semantic)
+;;(require 'cc-mode)
+;;(require 'semantic)
+;;(global-semanticdb-minor-mode 1)
+;;(global-semantic-idle-scheduler-mode 1)
+;;(semantic-mode 1)
 
-(global-semanticdb-minor-mode 1)
-(global-semantic-idle-scheduler-mode 1)
-
-(semantic-mode 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; gdb
 (setq
- ;; use gdb-many-windows by default
- gdb-many-windows t
-
- ;; Non-nil means display source file containing the main routine at startup
- gdb-show-main t
+ gdb-many-windows t  ;; use gdb-many-windows by default
+ gdb-show-main t ;; Non-nil means display source file containing the main routine at startup
  )
-;;To use gdb-many-windows, you must always supply the -i=mi argument to gdb,
+;; NB! To use gdb-many-windows, you must always supply the -i=mi argument to gdb,
