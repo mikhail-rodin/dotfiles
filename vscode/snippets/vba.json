@@ -1,0 +1,30 @@
+{
+	// Place your snippets for vba here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"For Next": {
+		"prefix": "for",
+		"body": "For $1 To $2\n\t$0\nNext $3",
+		"description": "For Next"
+	},
+	"If Then":{
+		"prefix": "if",
+		"body": "If $1 Then\n\t$2\nEnd If",
+		"description": "If Then End If"
+	},
+	"If Else":{
+		"prefix": "ifelse",
+		"body": "If $1 Then\n\t$2\nElse\n\t$3\nEnd If",
+		"description": "If Then Else End If"
+	},
+}

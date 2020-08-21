@@ -1,0 +1,258 @@
+{
+	// Place your snippets for latex here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"tabular-env":{
+		"prefix": "tabular-env",
+		"body": [
+			"\\begin{table}",
+			"\t\\centering",
+			"\t\\begin{tabular}{|c|c$1|}",
+			"\t\t\\hline",
+			"\t\t$0",
+			"\t\t\\hline",
+			"\t\\end{tabular}",
+			"\t\\caption{$2}",
+			"\t\\label{$3}", 
+			"\\end{table}"
+		],
+		"description": "tabular with caption & label"
+	},
+	"fourier":{
+		"prefix": "fourier",
+		"body": "\\mathcal{F}\\left[$1\\right]$0"
+	},
+	"mm":{
+		"prefix": "mm",
+		"body": "\\text{ мм}"
+	},
+	"partialx":{
+		"prefix": "d/dx",
+		"body": "\\frac{\\partial}{\\partial x}",
+		"description": "partial derivative, x"
+	},
+	"partialt":{
+		"prefix": "d/dt",
+		"body": "\\frac{\\partial}{\\partial t}",
+		"description": "partial derivative, t"
+	},
+	"tikzpicture":{
+		"prefix": ["tikzpic", "\\tikzpic"],
+		"body": "\\begin{tikzpicture}\n\t${2}\n\\end{tikzpicture}",
+		"description": "TikZ picture environment"
+	},
+	"wrapfigure":{
+		"prefix": ["wrapfig", "wfig", "\\wrapfig"],
+		"body": "\\begin{wrapfigure}{r}{0.25\\textwidth}\n\t${2}\n\\end{wrapfigure}",
+		"description": "wrapfig package"
+	},
+	"eqsystem":{
+		"prefix": ["eqsys", "\\eqsys"],
+		"body": "\\begin{equation}\n\t\\begin{cases}\n\t\t${2}\n\t\\end{cases}\n\\end{equation}",
+		"description": "system with a left bracket"
+	},
+	"waveexp":{
+		"prefix": "waveexp",
+		"body": "e^{i(\\omega t - k $1)}",
+		"description": "exp(i(wt-k*))"
+	},
+	"tikzNODE":{
+		"prefix": "tikznode",
+		"body": "node[anchor=$1]{$2}$0",
+		"description": "insert TikZ node"
+	},
+	"tikzSCOPE":{
+		"prefix": "tikzscope",
+		"body": "\\begin{scope}[shift=($1), rotate=$2]\n\t$3\n\\end{scope}"
+	},
+	"atpoint":{
+		"prefix": ["atpoint","\\atpoint"],
+		"body": "\\Bigr|_{\\substack{$1}}$0",
+		"description": "| bar eval at point"
+	},
+	"tikzSTANDALONE":{
+		"prefix": ["tikzstandalone", "tikzpreamble"],
+		"body": "\\documentclass{standalone}\n\\usepackage{tikz}\n\\usepackage{esvect}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{pgfplots}\n\n\\pgfmathsetmacro\\T{0.5}\n\n\\begin{document}\n\\begin{tikzpicture}\n\t$1\n\\end{tikzpicture}\n\\end{document}",
+		"description": "standalone TikZ environment"
+	},
+	"addplot":{
+		"prefix": "addplot",
+		"body": "\\addplot[domain=$1, samples=100]{$2}",
+		"description": "pgfplots addplot"
+	},
+	"pgfaxis":{
+		"prefix": "pgfaxis",
+		"body": [
+			"\\begin{axis}[",
+				"\taxis lines=left,",
+				"\tticks=none,",
+				"\thide axis,",
+				"\tat={(0,0)},",
+				"\tx=2cm,",
+				"\ty=2cm,",
+				"\t]",
+				"\t\\addplot[domain=$1, samples=100]{$2}",
+			"\\end{axis};",
+		],
+		"description": "pgfplots axis with a plot"
+	},
+	"pgfARROW":{
+		"prefix": "pgfarrow",
+		"body": "postaction={decorate},decoration={markings, mark=at position $1 with {\\arrow{>}}}",
+		"description": "add an arrow on a pgfplots curve",
+	},
+	"printbibliography":{
+		"prefix": ["printbib", "bibliography"],
+		"body": "\\printbibliography[env=gostbibliography]"
+	},
+	"tikzpic-optics":{
+		"prefix": ["\\tikzpic-opt", "\\tikzoptics"],
+		"body": "\\begin{tikzpicture}[use optics]\n\t${2}\n\\end{tikzpicture}",
+	},
+	"lens_at*":{
+		"prefix": "lens_at*",
+		"body": "\\node[lens, object height=$1] at ($2) {};",
+		"description": "unlabeled",
+	},
+	"mirror*":{
+		"prefix": "mirror_at*",
+		"body": "\\node[mirror] ($1) {$2};",
+		"description": "unlabeled mirror at (x,y)",
+	},
+	"lens_right*":{
+		"prefix": "lens_right*",
+		"body": "\\node[lens,\n\tright=$1cm of $2,\n\tobject height=$3]\n\t($4) {};",
+		"description": "unlabeled lens right of some named node at x cm",
+	},
+	"screen_at*":{
+		"prefix": "screen_at*",
+		"body": "\\node[screen] at ($1) {$2};",
+		"description": "unlabeled screen at (x,y)",
+	},
+	"screen_right*":{
+		"prefix": "screen_right*",
+		"body": "\\node[screen, right=$1cm of $2] ($3) {};",
+		"description": "unlabeled screen right of some named node at x cm",
+	},
+	"lens_at":{
+		"prefix": "lens_at",
+		"body": "\\node[lens,\n\tobject height=$1,\n\tlabel={[align=center]below:$2}]\n\tat ($3) {};",
+		"description": "labeled lens at (x,y)"
+	},
+	"mirror":{
+		"prefix": "mirror_at",
+		"body": "\\node[mirror,\n\tobject height=$1,\n\tlabel={[align=center]below:$2}]\n\t($3) {};",
+		"description": "labeled mirror at (x,y)"
+	},
+	"lens_right":{
+		"prefix": "lens_right",
+		"body": "\\node[lens, \n\tright=$1cm of $2,\n\tobject height=$3\n\tlabel={[align=center]below:$4}] \n\t($5) {};",
+		"description": "labeled lens right of some named node at x cm",
+	},
+	"screen_at":{
+		"prefix": "screen_at",
+		"body": "\\node[screen,\n\tobject height=$1,\n\tlabel={[align=center]below:$2}]\n\tat ($3) {};",
+		"description": "labeled screen at (x,y)",
+	},
+	"screen_right":{
+		"prefix": "screen_right",
+		"body": "\\node[screen, \n\tright=$1cm of $2,\n\tobject height=$3,\n\tlabel={[align=center]below:$4}]\n\t($5) {};",
+		"description": "screen right of some named node at x cm",
+	},
+	"ray1":{
+		"prefix": "ray1",
+		"body": "\\draw[->-] $0;",
+	},
+	"ray2":{
+		"prefix": "ray2",
+		"body": "\\draw[->>-] $0;",
+	},
+	"dims":{
+		"prefix": "dims",
+		"body": "\\draw ($1) to[dim arrow={label=$$2$, raise=0.5cm}] ($3);",
+		"description": "dimension arrow between two points"
+	},
+	"coord":{
+		"prefix": "coord",
+		"body": "coordinate ($1)$0",
+	},
+	"angle":{
+		"prefix": "angle",
+		"body": "\\pic[draw, $$1$, angle eccentricity=1.5]{angle=$2--$3--$4};"
+	},
+	"intersection":{
+		"prefix": "intersection",
+		"body": "\\coordinate ($1) at (intersection of $2--$3 and $4--$5);"
+	},
+	"spherical":{
+		"prefix": "sph",
+		"body": "\\Delta s'"
+	},
+	"spherical3":{
+		"prefix": "sph3",
+		"body": "\\Delta s'_{\\mathrm{III}}"
+	},
+	"coma":{
+		"prefix": "coma",
+		"body": "\\Delta y'_{к}"
+	},
+	"coma3":{
+		"prefix": "coma3",
+		"body": "\\Delta y'_{к\\mathrm{III}}"
+	},
+	"cfs-lambda":{
+		"prefix": "cfslambda",
+		"body": "\\Delta s'_{\\lambda 1,\\lambda 2}",
+		"description": "chromatic focal shift"
+	},
+	"cfs-FC":{
+		"prefix": "cfs",
+		"body": "\\Delta s'_{F'C'}",
+		"description": "chromatic focal shift"
+	},
+	"s1":{
+		"prefix": "s1",
+		"body": "S_{\\mathrm{I}}", 
+		"description": "Seidel spherical"
+	},
+	"s2":{
+		"prefix": "s2",
+		"body": "S_{\\mathrm{II}}", 
+		"description": "Seidel coma"
+	},
+	"s3":{
+		"prefix": "s3",
+		"body": "S_{\\mathrm{III}}", 
+		"description": "Seidel astigmatism"
+	},
+	"s4":{
+		"prefix": "s4",
+		"body": "S_{\\mathrm{IV}}", 
+		"description": "Seidel field curvature"
+	},
+	"s5":{
+		"prefix": "s5",
+		"body": "S_{\\mathrm{V}}", 
+		"description": "Seidel distortion"
+	},
+	"pgf-axis":{
+		"prefix": "\\axis",
+		"body": [
+			"\\begin{axis}[",
+			"\taxis lines=center",
+			"\t]",
+			"$0",
+			"\\end{axis}"
+		]
+	}
+}
