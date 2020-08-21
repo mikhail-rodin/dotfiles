@@ -1,0 +1,158 @@
+\documentclass[12 pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtext}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{csquotes}
+\usepackage{siunitx}
+\usepackage{textcomp}
+
+\usepackage{xfrac}
+
+\usepackage[parentracker=true,
+backend=biber,
+hyperref=false,
+bibencoding=utf8,
+style=numeric-comp,
+language=auto,
+autolang=other,
+citestyle=gost-numeric,
+defernumbers=true,
+bibstyle=gost-numeric,
+sorting=ntvy,
+]{biblatex}
+
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, nolistsep}
+
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+
+\usepackage{accents}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{esvect}
+\usepackage{gnuplottex}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+
+\usepackage[makeroom]{cancel}
+%\cancelto{\infty}{2 y} - diagonal strikeout
+
+%flexible strikeout:
+%\usepackage{xparse}
+%\DeclareDocumentCommand{\hcancel}{mO{0pt}O{0pt}O{0pt}O{0pt}}{%
+%    \tikz[baseline=(tocancel.base)]{
+%        \node[inner sep=0pt,outer sep=0pt] (tocancel) {#1};
+%        \draw[red] ($(tocancel.south west)+(#2,#3)$) -- ($(tocancel.north east)+(#4,#5)$);
+%    }%
+%}%
+%syntax \hcancel{<text>}{<start. point horiz. shifting>}{<start. point vertical shifting>}{<end. point horiz. shifting>}{<end. point vertical shifting>}
+
+\usepackage{relsize}
+% \text{\Large{$G$}} - font size in math mode
+
+%Figure placing:
+\usepackage{float}
+\usepackage{wrapfig}
+%h	Place the float here, i.e., approximately at the same point it occurs in the source text (however, not exactly at the spot)
+%t	Position at the top of the page.
+%b	Position at the bottom of the page.
+%p	Put on a special page for floats only.
+%!	Override internal parameters LaTeX uses for determining "good" float positions.
+%H	Places the float at precisely the location in the LATEX code. Requires the float package, though may cause problems occasionally. This is somewhat equivalent to h!.
+%команда eqref доступна для ссылки на формулы
+
+%\begin{wrapfigure}{r}{0.25\textwidth} %this figure will be at the right
+
+%\setlength\intextsep{0pt} - allow no unused vertical space 
+%\intextsep The vertical space placed above and below a float that is put in the middle of the text with the h location option. It is a rubber length.
+
+\usepackage{tikz}
+%\begin{tikzpicture}<br>
+%    \draw[help lines] (0,0) grid (3,2);<br>
+%    \draw (0,0) coordinate (A) -- (3,2) coordinate (B)<br>
+%          (1,2) -- (3,0);<br>
+%    \fill[red] (intersection of A--B and 1,2--3,0) circle (2pt);<br>
+%  \end{tikzpicture}
+\usetikzlibrary{3d, calc, math, tikzmark}
+
+%%% Code from https://tex.stackexchange.com/a/156581/95438 %%%
+%
+\usepackage{keycommand}
+% Patch by Joseph Wright ("bug in the definition of \ifcommandkey (2010/04/27 v3.1415)"),
+% https://tex.stackexchange.com/a/35794
+\begingroup
+\makeatletter
+\catcode`\/=8 %
+\@firstofone
+{
+    \endgroup
+    \renewcommand{\ifcommandkey}[1]{%
+        \csname @\expandafter \expandafter \expandafter
+        \expandafter \expandafter \expandafter \expandafter
+        \kcmd@nbk \commandkey {#1}//{first}{second}//oftwo\endcsname
+    }
+}
+%--------%
+\newkeycommand{\hcancel}[hshiftstart=0pt,vshiftstart=0pt,hshiftend=0pt,vshiftend=0pt,color=red][1]{%
+    \tikz[baseline=(tocancel.base)]{
+        \node[inner sep=0pt,outer sep=0pt] (tocancel) {#1};
+        \draw[\commandkey{color}] ($(tocancel.south west)+(\commandkey{hshiftstart},\commandkey{vshiftstart})$) --
+        ($(tocancel.north east)+(\commandkey{hshiftend},\commandkey{vshiftend})$);
+    }%
+}%
+\tikzset{cancel/.style={path picture={
+\draw[#1] (path picture bounding box.south west) -- 
+(path picture bounding box.north east);
+}}}
+\tikzset{cancelto/.style={path picture={
+\draw[#1, ->] (path picture bounding box.south west) -- 
+(path picture bounding box.north east);
+}}}
+%
+%%% End of code %%%
+%
+
+\makeatletter
+\DeclareRobustCommand{\cev}[1]{%
+  \mathpalette\do@cev{#1}%
+}
+\newcommand{\do@cev}[2]{%
+  \fix@cev{#1}{+}%
+  \reflectbox{$\m@th#1\vec{\reflectbox{$\fix@cev{#1}{-}\m@th#1#2\fix@cev{#1}{+}$}}$}%
+  \fix@cev{#1}{-}%
+}
+\newcommand{\fix@cev}[2]{%
+  \ifx#1\displaystyle
+    \mkern#23mu
+  \else
+    \ifx#1\textstyle
+      \mkern#23mu
+    \else
+      \ifx#1\scriptstyle
+        \mkern#22mu
+      \else
+        \mkern#22mu
+      \fi
+    \fi
+  \fi
+}
+
+\newcommand{\emf}{\mathcal{E}}
+
+\makeatother
+
+
+\title{
+    {\centering
+    \includegraphics[width=\textwidth]{C:/Users/Rodin/Documents/TEX/bmstu.pdf}}\\
+    \small{МГТУ им. Н.Э. Баумана} \\
+    ПРИБОРЫ ОПТИКО-ФИЗИЧЕСКИХ ИЗМЕРЕНИЙ \\ 
+    \small{ЭКЗАМЕНАЦИОННЫЕ ВОПРОСЫ} \\
+    \footnotesize{ВОПРОС 10}
+    } 
+\author{
+    \textit{6 семестр, группа РЛ2-И62Б, Родин М.И.}
+    }
