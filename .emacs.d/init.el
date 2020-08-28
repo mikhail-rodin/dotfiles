@@ -239,8 +239,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: yasnippet                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'yasnippet)
-(yas-global-mode 0)
+;;(require 'yasnippet)
+;;(yas-global-mode 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; xah-lookup - lookup docs on WWW    ;;
@@ -331,13 +331,13 @@
        (lsp-diagnostic-package :flymake)
        (lsp-prefer-capf t)
        (read-process-output-max (* 1024 1024))
-       (lsp-rust-server 'rust-analyzer)
        :config
        (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
 (use-package lsp-ui
        :custom
        (lsp-ui-doc-max-width 80)
        (lsp-ui-doc-position 'top))
+(use-package company-lsp)
 (use-package helm-lsp)
 (use-package lsp-treemacs)
 (use-package dap-mode
@@ -391,6 +391,32 @@
 ;;(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
 ;;(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 ;;(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+(use-package cmake-mode
+  :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'"))
+
+(use-package cmake-font-lock
+  :after (cmake-mode)
+  :hook (cmake-mode . cmake-font-lock-activate))
+
+(use-package cmake-ide
+  :after projectile
+  :hook (c++-mode . my/cmake-ide-find-project)
+  :preface
+  (defun my/cmake-ide-find-project ()
+    "Finds the directory of the project for cmake-ide."
+    (with-eval-after-load 'projectile
+      (setq cmake-ide-project-dir (projectile-project-root))
+      (setq cmake-ide-build-dir (concat cmake-ide-project-dir "build")))
+    (setq cmake-ide-compile-command
+            (concat "cd " cmake-ide-build-dir " && cmake .. && make"))
+    (cmake-ide-load-db))
+
+  (defun my/switch-to-compilation-window ()
+    "Switches to the *compilation* buffer after compilation."
+    (other-window 1))
+  :bind ([remap comment-region] . cmake-ide-compile)
+  :init (cmake-ide-setup)
+  :config (advice-add 'cmake-ide-compile :after #'my/switch-to-compilation-window))
 
 ;;::::::::::::::::::::::::::::::::::
 ;; Language-specific settings

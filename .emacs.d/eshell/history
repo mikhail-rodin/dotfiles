@@ -47,3 +47,25 @@ cd .emacs.d/
 ls
 config
 ls
+└─> λls 
+ls
+cd code/cmake_test/src/
+ls
+cd ..
+cd src
+cd ..
+chmod +x create_compile_DB.sh 
+cd src
+cd ..
+cd ..
+cmake
+cmake .
+cmake .
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=YES . 
+cd code/cmake_test
+ls
+make
+rm src/a.out
+make
+cd src
+./cmt
