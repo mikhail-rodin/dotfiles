@@ -163,6 +163,10 @@
 (use-package which-key  ;; show keybindings
     :ensure t)
 
+;; telephone-line
+(require 'telephone-line)
+(telephone-line-mode 1)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -236,7 +240,7 @@
 ;; Package: yasnippet                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'yasnippet)
-(yas-global-mode 1)
+(yas-global-mode 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; xah-lookup - lookup docs on WWW    ;;
@@ -291,6 +295,12 @@
        (company-posframe-mode)
        :custom
        (company-posframe-quickhelp-delay nil))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; aweshell                      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/aweshell"))
+(require 'aweshell)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helm config loading & helm-gtags config
@@ -382,15 +392,6 @@
 ;;(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 ;;(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; company
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
-;;(setq company-backends (delete 'company-semantic company-backends))
-;;(define-key c-mode-map  [(tab)] 'company-complete)
-;;(define-key c++-mode-map  [(tab)] 'company-complete)
-
 ;;::::::::::::::::::::::::::::::::::
 ;; Language-specific settings
 ;;::::::::::::::::::::::::::::::::::
@@ -398,16 +399,36 @@
 (setq c-default-style "linux"
           c-basic-offset 4)
 
-;; CEDET
-;;(require 'cc-mode)
-;;(require 'semantic)
-;;(global-semanticdb-minor-mode 1)
-;;(global-semantic-idle-scheduler-mode 1)
-;;(semantic-mode 1)
-
 ;; gdb
 (setq
  gdb-many-windows t  ;; use gdb-many-windows by default
  gdb-show-main t ;; Non-nil means display source file containing the main routine at startup
  )
 ;; NB! To use gdb-many-windows, you must always supply the -i=mi argument to gdb,
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LaTex                            ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package tex
+  :ensure auctex
+  :defer t
+  :custom
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+  (TeX-master nil)
+  ;; to use pdfview with auctex
+  (TeX-view-program-selection '((output-pdf "pdf-tools"))
+                              TeX-source-correlate-start-server t)
+  (TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
+  (TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+  :hook
+  (LaTeX-mode . (lambda ()
+                  (turn-on-reftex)
+                  (setq reftex-plug-into-AUCTeX t)
+                  (reftex-isearch-minor-mode)
+                  (setq TeX-PDF-mode t)
+                  (setq TeX-source-correlate-method 'synctex)
+                  (setq TeX-source-correlate-start-server t)))
+  :config
+  (when (version< emacs-version "26")
+    (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))

@@ -1,0 +1,1 @@
+("~/code/cmake_test/" "~/gitrepos/DTableUtil/" "~/build/xnviewmp/" "~/build/sct/")

@@ -1,0 +1,49 @@
+ls
+cd ..
+cd /
+ls
+cd usr
+ls
+cd bin
+ls
+ls
+cd $HOME
+ls
+chmod -x setup.sh 
+./setup.sh
+chmod +x setup.sh 
+./setup.sh
+ls
+ls -a
+config add .emacs
+source .bashrc
+config add .emacs
+source .bashrc
+source .bashrc
+sudo source ~/.bashrc
+gpg --list-secret-keys --keyid-format LONG
+gpg --armor --export 7DDBB872988C41D2 
+gpg --export-secret-keys --armor 7DDBB872988C41D2 > privkey.asc
+ls
+gpg --export --armor 7DDBB872988C41D2 > pubkey.asc
+ls
+pass init 7DDBB872988C41D2
+pass git init
+ls
+ls -a
+cd .password-store
+ls
+tree
+ls -a
+git remote add origin https://github.com/mikhail-rodin/keys.git
+git remote -v
+cat .git/config
+git push origin master
+curl cheat.sh/python/lambda
+ls -a
+cd ..
+ls
+cd .emacs.d/ 
+ls
+config
+ls
