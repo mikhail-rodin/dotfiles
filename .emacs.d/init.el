@@ -2,7 +2,7 @@
 ;; My name and e-mail adress
 (setq user-full-name   "Mikhail Rodin")
 (setq user-mail-adress "mihail.rodin.98@gmail.com")
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -161,12 +161,12 @@
 (define-key function-key-map "\M-[ d"  [C-left])
 
 (use-package which-key  ;; show keybindings
-    :ensure t)
-
-;; telephone-line
-(require 'telephone-line)
-(telephone-line-mode 1)
-
+    :ensure t
+)
+(use-package telephone-line
+    :ensure t
+    :init (telephone-line-mode 1)
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -175,10 +175,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; text processing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'evil)
-(evil-mode 1)
-
+(use-package evil
+    :ensure t
+    :config (evil-mode 1)
+    )
 ;; Line wrapping
 (setq word-wrap          t) ;; переносить по словам
 (global-visual-line-mode t)
@@ -204,38 +204,18 @@
 (add-to-list 'write-file-functions 'untabify-current-buffer)
 (add-to-list 'write-file-functions 'delete-trailing-whitespace)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGE: projectile                ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'projectile)
-(projectile-global-mode)
-(setq projectile-completion-system 'helm)
-;;(helm-projectile-on)
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(when (system-is-windows)
-    (setq projectile-indexing-method 'alien))
-(setq projectile-switch-project-action 'helm-projectile)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGE: treemacs                  ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'treemacs)
+(use-package treemacs
+    :ensure t
+)
 (global-set-key (kbd "C-x t t") 'treemacs)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGE: workgroups2               ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'workgroups2)
-;; Change some settings
-(workgroups-mode 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package: undo-tree                  ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'undo-tree)
-(global-undo-tree-mode)
-
+(use-package workgroups2
+    :ensure t
+    :config (workgroups-mode 1)
+)
+(use-package undo-tree
+    :ensure t
+    :config (global-undo-tree-mode)
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: yasnippet                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -256,25 +236,21 @@
    "http://en.cppreference.com/mwiki/index.php?search=word02051"
    'browse-url))
 (require 'cc-mode)
-;; Add shortcut for c++-mode
 (define-key c++-mode-map (kbd "C-c d") #'xah-lookup-cppreference)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package: volatile-highlights          ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-
-;; Package: smartparens
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGE: company                      ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package volatile-highlights
+    :ensure t
+    :config
+    (volatile-highlights-mode t)
+)
+(use-package smartparens-config
+    :ensure t
+    :config
+    (setq sp-base-key-bindings 'paredit)
+    (setq sp-autoskip-closing-pair 'always)
+    (setq sp-hybrid-kill-entire-symbol nil)
+    (sp-use-paredit-bindings)
+)
 (use-package company
        :hook (prog-mode . company-mode)
        :custom
@@ -289,7 +265,6 @@
        (company-show-numbers t)
        (company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
        (company-backends '(company-capf)))
-
 (use-package company-posframe
        :config
        (company-posframe-mode)
@@ -323,7 +298,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (use-package lsp-mode
        :hook
        ((c++-mode c-mode rust-mode go-mode csharp-mode python-mode cmake-mode) . lsp)
@@ -348,13 +322,11 @@
        (when (not (file-exists-p (expand-file-name ".extension" user-emacs-directory)))
          (dap-gdb-lldb-setup t)
          (dap-go-setup t)))
-
      (lsp-register-client
       (make-lsp-client :new-connection (lsp-tramp-connection "clangd")
                        :major-modes '(c/c++-mode)
                        :remote? t
                        :server-id 'clangd-remote))
-
      (defun clang-ide ()
        (interactive)
        (treemacs)
@@ -364,12 +336,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IDE tools
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(use-package projectile
+    :ensure t
+    :config (projectile-global-mode)
+            (setq projectile-completion-system 'helm)
+            ;;(helm-projectile-on)
+            (when (system-is-windows)
+                (setq projectile-indexing-method 'alien))
+            (setq projectile-switch-project-action 'helm-projectile)
+    :bind (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+          (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+)
 ;; sr-speedbar
 (add-hook 'c-mode-hook 'sr-speedbar-open)
 (add-hook 'c++-mode-hook 'sr-speedbar-open)
 (add-hook 'asm-mode-hook 'sr-speedbar-open)
-
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status))
 (require 'function-args)
 ;; provides moo-jump-local (search func name and jump to it)
 ;; TODO: set hotkey
@@ -393,11 +377,9 @@
 ;;(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 (use-package cmake-mode
   :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'"))
-
 (use-package cmake-font-lock
   :after (cmake-mode)
   :hook (cmake-mode . cmake-font-lock-activate))
-
 (use-package cmake-ide
   :after projectile
   :hook (c++-mode . my/cmake-ide-find-project)
@@ -410,7 +392,6 @@
     (setq cmake-ide-compile-command
             (concat "cd " cmake-ide-build-dir " && cmake .. && make"))
     (cmake-ide-load-db))
-
   (defun my/switch-to-compilation-window ()
     "Switches to the *compilation* buffer after compilation."
     (other-window 1))
@@ -421,7 +402,6 @@
 ;;::::::::::::::::::::::::::::::::::
 ;; Language-specific settings
 ;;::::::::::::::::::::::::::::::::::
-
 (setq c-default-style "linux"
           c-basic-offset 4)
 
