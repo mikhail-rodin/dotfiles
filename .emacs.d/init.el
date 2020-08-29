@@ -88,11 +88,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; menus and UI
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (tool-bar-mode -1)
 (menu-bar-mode 1)
 (setq frame-title-format "GNU Emacs: %b") ;; Display the name of the current buffer in the title bar
-
 (global-set-key (kbd "M-x") 'helm-M-x) ;; use helm M-x with autocomplete instead
 (global-set-key (kbd "C-i") 'helm-info)
 
@@ -106,7 +104,6 @@
             (ibuffer-vc-set-filter-groups-by-vc-root)
             (unless (eq ibuffer-sorting-mode 'alphabetic)
               (ibuffer-do-sort-by-alphabetic))))
-
 (setq ibuffer-formats
       '((mark modified read-only vc-status-mini " "
               (name 18 18 :left :elide)
@@ -132,7 +129,7 @@
 
 ;; Inhibit startup/splash screen
 (setq inhibit-splash-screen   t)
-(setq ingibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
+(setq inhibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
 
 ;; Scrolling settings
 (setq scroll-step               1) ;; вверх-вниз по 1 строке
@@ -159,7 +156,10 @@
 (define-key function-key-map "\M-[ b"  [C-down])
 (define-key function-key-map "\M-[ c"  [C-right])
 (define-key function-key-map "\M-[ d"  [C-left])
-
+(use-package treemacs
+    :ensure t
+)
+(global-set-key (kbd "C-x t t") 'treemacs)
 (use-package which-key  ;; show keybindings
     :ensure t
 )
@@ -204,10 +204,9 @@
 (add-to-list 'write-file-functions 'untabify-current-buffer)
 (add-to-list 'write-file-functions 'delete-trailing-whitespace)
 
-(use-package treemacs
-    :ensure t
-)
-(global-set-key (kbd "C-x t t") 'treemacs)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; PACKAGES: additional functionality ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package workgroups2
     :ensure t
     :config (workgroups-mode 1)
@@ -216,15 +215,12 @@
     :ensure t
     :config (global-undo-tree-mode)
 )
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package: yasnippet                 ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(require 'yasnippet)
-;;(yas-global-mode 0)
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; xah-lookup - lookup docs on WWW    ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(setq xah-lookup-browser-function 'eww)
 (defun xah-lookup-cppreference (&optional @word)
   "Lookup definition of current word or text selection in URL."
@@ -237,7 +233,7 @@
    'browse-url))
 (require 'cc-mode)
 (define-key c++-mode-map (kbd "C-c d") #'xah-lookup-cppreference)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package volatile-highlights
     :ensure t
     :config
@@ -264,16 +260,31 @@
        (company-require-match 'never)
        (company-show-numbers t)
        (company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
-       (company-backends '(company-capf)))
+       ;;(company-backends '(company-capf)))
+       (setq company-backends
+        '((company-files          ; files & directory
+           company-keywords       ; keywords
+           company-capf)  ; completion-at-point-functions
+          (company-abbrev company-dabbrev)
+          ))
 (use-package company-posframe
        :config
        (company-posframe-mode)
        :custom
        (company-posframe-quickhelp-delay nil))
+(use-package company-try-hard
+    :straight t
+    :bind
+    (("C-<tab>" . company-try-hard)
+     :map company-active-map
+     ("C-<tab>" . company-try-hard)))
+(use-package company-quickhelp
+    :straight t
+    :config
+    (company-quickhelp-mode))
+)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; aweshell                      ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/aweshell"))
 (require 'aweshell)
 
@@ -355,8 +366,7 @@
   :ensure t
   :bind ("C-x g" . magit-status))
 (require 'function-args)
-;; provides moo-jump-local (search func name and jump to it)
-;; TODO: set hotkey
+
 (fa-config-default)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)) ;; Put c++-mode as default for *.h files (improves parsing):
 (set-default 'semantic-case-fold t) ;; case-insensitive enabled
@@ -438,3 +448,14 @@
   :config
   (when (version< emacs-version "26")
     (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; python                                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package ein
+    :ensure t
+    )
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))

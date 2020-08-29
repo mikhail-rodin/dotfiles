@@ -264,13 +264,29 @@
        (company-require-match 'never)
        (company-show-numbers t)
        (company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
-       (company-backends '(company-capf)))
+       ;;(company-backends '(company-capf)))
+       (setq company-backends
+        '((company-files          ; files & directory
+           company-keywords       ; keywords
+           company-capf)  ; completion-at-point-functions
+          (company-abbrev company-dabbrev)
+          ))
 (use-package company-posframe
        :config
        (company-posframe-mode)
        :custom
        (company-posframe-quickhelp-delay nil))
-
+(use-package company-try-hard
+    :straight t
+    :bind
+    (("C-<tab>" . company-try-hard)
+     :map company-active-map
+     ("C-<tab>" . company-try-hard)))
+(use-package company-quickhelp
+    :straight t
+    :config
+    (company-quickhelp-mode))
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; aweshell                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -351,7 +367,9 @@
 (add-hook 'c-mode-hook 'sr-speedbar-open)
 (add-hook 'c++-mode-hook 'sr-speedbar-open)
 (add-hook 'asm-mode-hook 'sr-speedbar-open)
-
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status))
 (require 'function-args)
 ;; provides moo-jump-local (search func name and jump to it)
 ;; TODO: set hotkey
@@ -436,3 +454,14 @@
   :config
   (when (version< emacs-version "26")
     (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; python                                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package ein
+    :ensure t
+    )
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))

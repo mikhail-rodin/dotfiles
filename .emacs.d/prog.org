@@ -19,3 +19,20 @@ Default prefix is C-c z, default keys:
 <prefix> v          ; switch to workgroup
 <prefix> C-s        ; save session
 <prefix> C-f        ; load session
+* ipynb
+Handled by 'ein'. C-c C-o to start.
+* magit
+C-g to show a summary of git status and diff.
+* python
+Elpy handles:
++ code completion via 'jedi' and 'company-mode'
++ documentation (shows function definitions)
++ jump to def
++ send to REPL
++ basic refactoring
++ error checking via flymake
+* code completion
+** company-quickhelp
+shows a docstring for a highlighted completion candidate if you're thinking too long
+** company-posframe
+draws child frames for a completion candidate

@@ -69,3 +69,6 @@ rm src/a.out
 make
 cd src
 ./cmt
+config status
+pip
+pip list
