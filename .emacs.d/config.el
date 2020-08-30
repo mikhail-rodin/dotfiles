@@ -1,13 +1,7 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; My name and e-mail adress
 (setq user-full-name   "Mikhail Rodin")
 (setq user-mail-adress "mihail.rodin.98@gmail.com")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -15,34 +9,23 @@
  '(custom-enabled-themes (quote (deeper-blue)))
  '(package-selected-packages (quote (evil-visual-mark-mode slime))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Basic Functionality
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq x-select-enable-clipboard t)
 (require 'use-package)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; OS-dependant config
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun system-is-linux()
     (string-equal system-type "gnu/linux"))
 (defun system-is-windows()
   (string-equal system-type "windows-nt"))
 
-;; Start Emacs as a server
 (when (system-is-linux)
     (require 'server)
     (unless (server-running-p)
       (server-start))) ;; запустить Emacs как сервер, если ОС - GNU/Linux
 
-;; MS Windows path-variable
 (when (system-is-windows)
     (setq win-sbcl-exe          "C:/sbcl/sbcl.exe")
     (setq win-init-path         "C:/.emacs.d")
@@ -51,7 +34,6 @@
     (setq win-init-slime-path   "C:/slime")
     (setq win-init-ac-dict-path "C:/.emacs.d/plugins/auto-complete/dict"))
 
-;; Unix path-variable
 (when (system-is-linux)
     (setq unix-sbcl-bin          "/usr/bin/sbcl")
     (setq unix-init-path         "~/.emacs.d")
@@ -65,7 +47,6 @@
     (add-to-list 'load-path win-init-path)
   (add-to-list 'load-path unix-init-path))
 
-;; Coding-system settings
 ;;(set-language-environment 'UTF-8)
 (if (system-is-linux) ;; для GNU/Linux кодировка utf-8, для MS Windows - windows-1251
     (progn
@@ -85,15 +66,13 @@
         (setq-default coding-system-for-read    'windows-1251)
         (setq default-buffer-file-coding-system 'windows-1251)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; menus and UI
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(desktop-save-mode 1) ;; revert last saved session
 (tool-bar-mode -1)
 (menu-bar-mode 1)
 (setq frame-title-format "GNU Emacs: %b") ;; Display the name of the current buffer in the title bar
-(global-set-key (kbd "M-x") 'helm-M-x) ;; use helm M-x with autocomplete instead
-(global-set-key (kbd "C-i") 'helm-info)
+;; Inhibit startup/splash /screen
+(setq inhibit-splash-screen   t)
+(setq inhibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
 
 ;; Buffer Selection and ibuffer settings
 (require 'bs)
@@ -123,28 +102,10 @@
 (setq imenu-use-popup-menu t) ;; диалоги Imenu только в минибуфере
 (global-set-key (kbd "<f6>") 'imenu) ;; вызов Imenu на F6
 
-;(setq mouse-wheel-scroll-amount '(0.07))
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq mouse-wheel-progressive-speed nil)
-(setq scroll-step 1)
-
-;; Inhibit startup/splash screen
-(setq inhibit-splash-screen   t)
-(setq inhibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
-
-;; Scrolling settings
-(setq scroll-step               1) ;; вверх-вниз по 1 строке
-(setq scroll-margin            10) ;; сдвигать буфер верх/вниз когда курсор в 10 шагах от верхней/нижней границы
-(setq scroll-conservatively 10000)
-
-;; Short messages
+(global-set-key (kbd "M-x") 'helm-M-x) ;; use helm M-x with autocomplete instead
+(global-set-key (kbd "C-i") 'helm-info)
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Highlight search results
-(setq search-highlight        t)
-(setq query-replace-highlight t)
-
-;; Easy transition between buffers: M-arrow-keys
+;;Easy transition between buffers: M-arrow-keys
 (if (equal nil (equal major-mode 'org-mode))
     (windmove-default-keybindings 'meta)
     (windmove-default-keybindings 'control))
@@ -157,6 +118,23 @@
 (define-key function-key-map "\M-[ b"  [C-down])
 (define-key function-key-map "\M-[ c"  [C-right])
 (define-key function-key-map "\M-[ d"  [C-left])
+(use-package evil
+    :ensure t
+    :config (evil-mode 1)
+    )
+
+;(setq mouse-wheel-scroll-amount '(0.07))
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(setq mouse-wheel-progressive-speed nil)
+(setq scroll-step 1)
+;; Scrolling settings
+(setq scroll-step               1) ;; вверх-вниз по 1 строке
+(setq scroll-margin            10) ;; сдвигать буфер верх/вниз когда курсор в 10 шагах от верхней/нижней границы
+(setq scroll-conservatively 10000)
+
+(setq search-highlight        t)
+(setq query-replace-highlight t)
+
 (use-package treemacs
     :ensure t
 )
@@ -172,19 +150,13 @@
     :ensure t
     :config
     (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; org-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil))) ;; line wrap on
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; text processing
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil))) ;; line wrap on
+(load "~/.emacs.d/org-insert-source-block.el") ;; custom function
+(eval-after-load 'org-mode
+                    '(define-key org-mode-map [(C-s)] 'org-insert-source-block))
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(use-package evil
-    :ensure t
-    :config (evil-mode 1)
-    )
 ;; Line wrapping
 (setq word-wrap          t) ;; переносить по словам
 (global-visual-line-mode t)
@@ -210,9 +182,6 @@
 (add-to-list 'write-file-functions 'untabify-current-buffer)
 (add-to-list 'write-file-functions 'delete-trailing-whitespace)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGES: additional functionality ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package workgroups2
     :ensure t
     :config (workgroups-mode 1)
@@ -295,9 +264,6 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/aweshell"))
 (require 'aweshell)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Helm config loading & helm-gtags config
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'setup-helm)
 (require 'helm-gtags)
 ;;; Enable helm-gtags-mode
@@ -313,9 +279,6 @@
  helm-gtags-suggested-key-mapping t
  )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LSP
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package lsp-mode
        :hook
        ((c++-mode c-mode rust-mode go-mode csharp-mode python-mode cmake-mode) . lsp)
@@ -351,9 +314,6 @@
        (lsp-treemacs-symbols)
        (lsp-treemacs-errors-list))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; IDE tools
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package projectile
     :ensure t
     :config (projectile-global-mode)
@@ -365,6 +325,7 @@
     :bind (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
           (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 )
+
 ;; sr-speedbar
 (add-hook 'c-mode-hook 'sr-speedbar-open)
 (add-hook 'c++-mode-hook 'sr-speedbar-open)
@@ -392,6 +353,7 @@
 ;;(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
 ;;(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 ;;(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+
 (use-package cmake-mode
   :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'"))
 (use-package cmake-font-lock
@@ -416,9 +378,6 @@
   :init (cmake-ide-setup)
   :config (advice-add 'cmake-ide-compile :after #'my/switch-to-compilation-window))
 
-;;::::::::::::::::::::::::::::::::::
-;; Language-specific settings
-;;::::::::::::::::::::::::::::::::::
 (setq c-default-style "linux"
           c-basic-offset 4)
 
@@ -429,9 +388,14 @@
  )
 ;; NB! To use gdb-many-windows, you must always supply the -i=mi argument to gdb,
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LaTex                            ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package ein
+    :ensure t
+    )
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
+
 (use-package tex
   :ensure auctex
   :defer t
@@ -455,14 +419,3 @@
   :config
   (when (version< emacs-version "26")
     (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; python                                              ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package ein
-    :ensure t
-    )
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable))

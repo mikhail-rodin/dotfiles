@@ -36,3 +36,6 @@ Elpy handles:
 shows a docstring for a highlighted completion candidate if you're thinking too long
 ** company-posframe
 draws child frames for a completion candidate
+* org-mode
+** code snippets
+C-c-' inside snippet to open it in a new buffer with all  the language-specific major mode features present.

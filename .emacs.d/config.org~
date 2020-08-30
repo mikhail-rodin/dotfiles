@@ -1,42 +1,45 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; My name and e-mail adress
+* Personal info
+#+BEGIN_SRC emacs-lisp
 (setq user-full-name   "Mikhail Rodin")
 (setq user-mail-adress "mihail.rodin.98@gmail.com")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+* Variables set via 'custom' menu
+  includes a theme
+** warning
+custom-set-variables was added by Custom.
+If you edit it by hand, you could mess it up, so be careful.
+Your init file should contain only one such instance.
+If there is more than one, they won't work right.
+** code
+#+BEGIN_SRC emacs-lisp
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(custom-enabled-themes (quote (deeper-blue)))
  '(package-selected-packages (quote (evil-visual-mark-mode slime))))
+#+END_SRC
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Basic Functionality
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+* Basic functionality
+#+BEGIN_SRC emacs-lisp
 (setq x-select-enable-clipboard t)
 (require 'use-package)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; OS-dependant config
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+#+END_SRC
+* OS-dependant config
+** OS detecting code
+#+BEGIN_SRC emacs-lisp
 (defun system-is-linux()
     (string-equal system-type "gnu/linux"))
 (defun system-is-windows()
   (string-equal system-type "windows-nt"))
-
-;; Start Emacs as a server
+#+END_SRC
+** Start Emacs as a server on *nix
+#+BEGIN_SRC emacs-lisp
 (when (system-is-linux)
     (require 'server)
     (unless (server-running-p)
@@ -128,7 +131,7 @@
 (setq mouse-wheel-progressive-speed nil)
 (setq scroll-step 1)
 
-;; Inhibit startup/splash screen
+;; Inhibit startup/splash /screen
 (setq inhibit-splash-screen   t)
 (setq inhibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
 
@@ -176,6 +179,9 @@
 ;; org-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil))) ;; line wrap on
+(load "~/.emacs.d/org-insert-source-block.el") ;; custom function
+(eval-after-load 'org-mode
+                    '(define-key org-mode-map [(C-s)] 'org-insert-source-block))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; text processing
@@ -466,3 +472,4 @@
   :ensure t
   :init
   (elpy-enable))
+#+END_SRC
