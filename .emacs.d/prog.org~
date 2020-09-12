@@ -1,0 +1,38 @@
+* projectile
+All VCS repos (.git and the like) are supported projects.
+* lsp-mode
+** requirements
+   - working projectile
+   - compile_commands.json in project root (can be generated with cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+     - clangd server running in background
+** usage
+Run an lsp command first, minibuffer should say 'clangd running. lsp-doctor can be used to diagnose errors. With an lsp client started and lsp-ui enabled, popup autocompletion and docstrings will appear while typing and moving a cursor over function names.
+* workgroups2
+Uses custom serialization protocol to save window layouts.
+- Use M-x wg-create-workgroup to save current windows layout.
+- Use M-x wg-open-workgroup to open saved windows layout.
+Default prefix is C-c z, default keys:
+<prefix> <key>
+<prefix> c          ; create workgroup
+<prefix> A          ; rename workgroup
+<prefix> k          ; kill workgroup
+<prefix> v          ; switch to workgroup
+<prefix> C-s        ; save session
+<prefix> C-f        ; load session
+* ipynb
+Handled by 'ein'. C-c C-o to start.
+* magit
+C-g to show a summary of git status and diff.
+* python
+Elpy handles:
++ code completion via 'jedi' and 'company-mode'
++ documentation (shows function definitions)
++ jump to def
++ send to REPL
++ basic refactoring
++ error checking via flymake
+* code completion
+** company-quickhelp
+shows a docstring for a highlighted completion candidate if you're thinking too long
+** company-posframe
+draws child frames for a completion candidate

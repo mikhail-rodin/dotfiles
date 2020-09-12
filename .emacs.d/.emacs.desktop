@@ -1,0 +1,55 @@
+;; -*- mode: emacs-lisp; lexical-binding:t; coding: utf-8-emacs; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Sun Aug 30 21:30:55 2020
+;; Desktop file format version 208
+;; Emacs version 27.1
+
+;; Global section:
+(setq desktop-saved-frameset nil)
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring '(#("desk" 0 4 (isearch-case-fold-search t)) #("compa" 0 5 (isearch-case-fold-search t)) #("menus" 0 5 (isearch-case-fold-search t)) #("processin" 0 9 (isearch-case-fold-search t)) #("text " 0 5 (isearch-case-fold-search t)) #("posframe" 0 8 (isearch-case-fold-search t)) #("pos" 0 3 (isearch-case-fold-search t))))
+(setq register-alist nil)
+(setq file-name-history '("~/.emacs.d/init.el" "~/.emacs.d/prog.org"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 208
+  "/home/rodin/.emacs.d/init.el"
+  "init.el"
+  'emacs-lisp-mode
+  '(visual-line-mode eldoc-mode override-global-mode rainbow-delimiters-mode undo-tree-mode workgroups-mode yas-minor-mode volatile-highlights-mode helm-ff-cache-mode helm-mode)
+  4185
+  '(1 nil)
+  nil
+  nil
+  '((buffer-display-time 24395 61520 521109 209000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring (1))))
+
+(desktop-create-buffer 208
+  "/home/rodin/.emacs.d/prog.org"
+  "prog.org"
+  'org-mode
+  '(visual-line-mode override-global-mode undo-tree-mode workgroups-mode yas-minor-mode volatile-highlights-mode helm-ff-cache-mode helm-mode)
+  1499
+  '(1499 nil)
+  nil
+  nil
+  '((buffer-display-time 24395 61520 485666 909000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring (1499 1506 1633))))
+
+(desktop-create-buffer 208
+  nil
+  "rodin"
+  'dired-mode
+  '(visual-line-mode override-global-mode workgroups-mode yas-minor-mode volatile-highlights-mode helm-ff-cache-mode helm-mode)
+  2898
+  '(2898 nil)
+  t
+  '("/home/rodin/")
+  '((buffer-display-time 24395 61520 485667 625000) (overwrite-mode) (truncate-lines))
+  '((mark-ring (2898))))
+
