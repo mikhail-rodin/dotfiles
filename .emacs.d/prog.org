@@ -7,6 +7,10 @@ All VCS repos (.git and the like) are supported projects.
      - clangd server running in background
 ** usage
 Run an lsp command first, minibuffer should say 'clangd running. lsp-doctor can be used to diagnose errors. With an lsp client started and lsp-ui enabled, popup autocompletion and docstrings will appear while typing and moving a cursor over function names.
+** lsp-treemacs
+(lsp-treemacs-symbols) displays object model in the tree.
+** cmake
+Use cmake language server.
 * workgroups2
 Uses custom serialization protocol to save window layouts.
 - Use M-x wg-create-workgroup to save current windows layout.
@@ -38,4 +42,52 @@ shows a docstring for a highlighted completion candidate if you're thinking too 
 draws child frames for a completion candidate
 * org-mode
 ** code snippets
+org-insert-source-block function inserts an SRC block.
+
 C-c-' inside snippet to open it in a new buffer with all  the language-specific major mode features present.
+C-c C-c to execute.
+
+** examples
+:PROPERTIES:
+  :header-args: :eval never-export
+  :header-args:bash: :exports code
+  :header-args:elisp: :exports code
+  :header-args:ipython: :exports both
+:END:
+
+#+BEGIN_SRC python :results output
+  import random
+  random.seed(1)
+  print("Hello World! Here's a random number: %f" % random.random())
+#+END_SRC
+
+#+RESULTS:
+: Hello World! Here's a random number: 0.134364
+
+#+BEGIN_SRC bash :dir ~/Desktop
+  pwd
+#+END_SRC
+
+#+RESULTS:
+: /home/rodin/Desktop
+
+#+BEGIN_SRC ipython :results drawer :async t :session py2session
+  %matplotlib inline
+  import numpy as np
+  import matplotlib.pyplot as plt
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[6]:
+:end:
+
+#+BEGIN_SRC ipython :results drawer :async t :session py2session
+  fig=plt.figure(facecolor='white')
+  plt.hist(np.random.randn(500000), bins=100);
+#+END_SRC
+
+#+RESULTS:
+:results:
+0 - adfd89f7-e796-448b-ba8c-f893fc1cce67
+:end:

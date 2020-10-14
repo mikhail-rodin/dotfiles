@@ -13,6 +13,8 @@ If there is more than one, they won't work right.
 ** code
 #+BEGIN_SRC emacs-lisp
 (custom-set-variables
+'(term-default-bg-color "#000000")        ;; background color (black)
+     '(term-default-fg-color "#dddd00")       ;; foreground color (yellow)
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -20,7 +22,6 @@ If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (deeper-blue)))
  '(package-selected-packages (quote (evil-visual-mark-mode slime))))
 #+END_SRC
-
 * Basic functionality
 #+BEGIN_SRC emacs-lisp
 (setq x-select-enable-clipboard t)
@@ -44,8 +45,9 @@ If there is more than one, they won't work right.
     (require 'server)
     (unless (server-running-p)
       (server-start))) ;; запустить Emacs как сервер, если ОС - GNU/Linux
-
-;; MS Windows path-variable
+#+END_SRC
+** Set paths
+#+BEGIN_SRC emacs-lisp
 (when (system-is-windows)
     (setq win-sbcl-exe          "C:/sbcl/sbcl.exe")
     (setq win-init-path         "C:/.emacs.d")
@@ -54,7 +56,6 @@ If there is more than one, they won't work right.
     (setq win-init-slime-path   "C:/slime")
     (setq win-init-ac-dict-path "C:/.emacs.d/plugins/auto-complete/dict"))
 
-;; Unix path-variable
 (when (system-is-linux)
     (setq unix-sbcl-bin          "/usr/bin/sbcl")
     (setq unix-init-path         "~/.emacs.d")
@@ -67,8 +68,9 @@ If there is more than one, they won't work right.
 (if (system-is-windows)
     (add-to-list 'load-path win-init-path)
   (add-to-list 'load-path unix-init-path))
-
-;; Coding-system settings
+#+END_SRC
+** Text encoding
+#+BEGIN_SRC emacs-lisp
 ;;(set-language-environment 'UTF-8)
 (if (system-is-linux) ;; для GNU/Linux кодировка utf-8, для MS Windows - windows-1251
     (progn
@@ -87,17 +89,20 @@ If there is more than one, they won't work right.
         (setq file-name-coding-system           'windows-1251)
         (setq-default coding-system-for-read    'windows-1251)
         (setq default-buffer-file-coding-system 'windows-1251)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; menus and UI
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+* UI settings and extra menus
+** UI
+#+BEGIN_SRC emacs-lisp
 ;;(desktop-save-mode 1) ;; revert last saved session
 (tool-bar-mode -1)
 (menu-bar-mode 1)
 (setq frame-title-format "GNU Emacs: %b") ;; Display the name of the current buffer in the title bar
-(global-set-key (kbd "M-x") 'helm-M-x) ;; use helm M-x with autocomplete instead
-(global-set-key (kbd "C-i") 'helm-info)
-
+;; Inhibit startup/splash /screen
+(setq inhibit-splash-screen   t)
+(setq inhibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
+#+END_SRC
+** Menus
+#+BEGIN_SRC emacs-lisp
 ;; Buffer Selection and ibuffer settings
 (require 'bs)
 (require 'ibuffer)
@@ -125,29 +130,13 @@ If there is more than one, they won't work right.
 (setq imenu-auto-rescan      t) ;; автоматически обновлять список функций в буфере
 (setq imenu-use-popup-menu t) ;; диалоги Imenu только в минибуфере
 (global-set-key (kbd "<f6>") 'imenu) ;; вызов Imenu на F6
-
-;(setq mouse-wheel-scroll-amount '(0.07))
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq mouse-wheel-progressive-speed nil)
-(setq scroll-step 1)
-
-;; Inhibit startup/splash /screen
-(setq inhibit-splash-screen   t)
-(setq inhibit-startup-message t) ;; экран приветствия можно вызвать комбинацией C-h C-a
-
-;; Scrolling settings
-(setq scroll-step               1) ;; вверх-вниз по 1 строке
-(setq scroll-margin            10) ;; сдвигать буфер верх/вниз когда курсор в 10 шагах от верхней/нижней границы
-(setq scroll-conservatively 10000)
-
-;; Short messages
+#+END_SRC
+** Basic keybindings
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-x") 'helm-M-x) ;; use helm M-x with autocomplete instead
+(global-set-key (kbd "C-i") 'helm-info)
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Highlight search results
-(setq search-highlight        t)
-(setq query-replace-highlight t)
-
-;; Easy transition between buffers: M-arrow-keys
+;;Easy transition between buffers: M-arrow-keys
 (if (equal nil (equal major-mode 'org-mode))
     (windmove-default-keybindings 'meta)
     (windmove-default-keybindings 'control))
@@ -160,6 +149,29 @@ If there is more than one, they won't work right.
 (define-key function-key-map "\M-[ b"  [C-down])
 (define-key function-key-map "\M-[ c"  [C-right])
 (define-key function-key-map "\M-[ d"  [C-left])
+(use-package evil
+    :ensure t
+    :config (evil-mode 1)
+    )
+#+END_SRC
+** Scrolling
+#+BEGIN_SRC emacs-lisp
+;(setq mouse-wheel-scroll-amount '(0.07))
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(setq mouse-wheel-progressive-speed nil)
+(setq scroll-step 1)
+;; Scrolling settings
+(setq scroll-step               1) ;; вверх-вниз по 1 строке
+(setq scroll-margin            10) ;; сдвигать буфер верх/вниз когда курсор в 10 шагах от верхней/нижней границы
+(setq scroll-conservatively 10000)
+#+END_SRC
+** Highlighting
+#+BEGIN_SRC emacs-lisp
+(setq search-highlight        t)
+(setq query-replace-highlight t)
+#+END_SRC
+** Packages
+#+BEGIN_SRC emacs-lisp
 (use-package treemacs
     :ensure t
 )
@@ -175,22 +187,38 @@ If there is more than one, they won't work right.
     :ensure t
     :config
     (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; org-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+* org-mode
+#+BEGIN_SRC emacs-lisp
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil))) ;; line wrap on
 (load "~/.emacs.d/org-insert-source-block.el") ;; custom function
 (eval-after-load 'org-mode
                     '(define-key org-mode-map [(C-s)] 'org-insert-source-block))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; text processing
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-(use-package evil
+#+END_SRC
+** org-babel
+#+BEGIN_SRC emacs-lisp
+;; Run/highlight code using babel in org-mode
+(use-package ob-ipython
     :ensure t
-    :config (evil-mode 1)
-    )
+)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (python . t)
+   (shell . t)
+   (ipython . t)
+   ;; Include other languages here...
+   ))
+;; Syntax highlight in #+BEGIN_SRC blocks
+(setq org-src-fontify-natively t)
+;; Don't prompt before running code in org
+(setq org-confirm-babel-evaluate nil)
+
+#+END_SRC
+
+* Text processing options
+#+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; Line wrapping
 (setq word-wrap          t) ;; переносить по словам
 (global-visual-line-mode t)
@@ -215,10 +243,9 @@ If there is more than one, they won't work right.
     nil)
 (add-to-list 'write-file-functions 'untabify-current-buffer)
 (add-to-list 'write-file-functions 'delete-trailing-whitespace)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGES: additional functionality ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+* Packages for additional functionality
+#+BEGIN_SRC emacs-lisp
 (use-package workgroups2
     :ensure t
     :config (workgroups-mode 1)
@@ -259,6 +286,9 @@ If there is more than one, they won't work right.
     ;;(setq sp-hybrid-kill-entire-symbol nil)
     ;;(sp-use-paredit-bindings)
 ;;)
+#+END_SRC
+* Autocompletion
+#+BEGIN_SRC emacs-lisp
 (use-package company
        :hook (prog-mode . company-mode)
        :custom
@@ -273,12 +303,21 @@ If there is more than one, they won't work right.
        (company-show-numbers t)
        (company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
        ;;(company-backends '(company-capf)))
-       (setq company-backends
-        '((company-files          ; files & directory
-           company-keywords       ; keywords
-           company-capf)  ; completion-at-point-functions
-          (company-abbrev company-dabbrev)
-          ))
+       ;;(setq company-backends
+        ;;'((company-files          ; files & directory
+           ;;company-keywords       ; keywords
+           ;;company-capf)  ; completion-at-point-functions
+          ;;(company-abbrev company-dabbrev)
+          ;;))
+        :init
+        (setq company-backends
+          '((company-files
+             company-keywords
+             company-capf
+             company-dabbrev-code
+             company-etags
+             company-dabbrev))
+        )
 (use-package company-posframe
     :ensure t
        :config
@@ -286,24 +325,19 @@ If there is more than one, they won't work right.
        :custom
        (company-posframe-quickhelp-delay nil))
 (use-package company-try-hard
-    :straight t
+    :ensure t
     :bind
     (("C-<tab>" . company-try-hard)
      :map company-active-map
      ("C-<tab>" . company-try-hard)))
 (use-package company-quickhelp
-    :straight t
+    :ensure t
     :config
     (company-quickhelp-mode))
 )
-
-;; aweshell                      ;;
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/aweshell"))
-(require 'aweshell)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Helm config loading & helm-gtags config
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+** Helm config
+#+BEGIN_SRC emacs-lisp
 (require 'setup-helm)
 (require 'helm-gtags)
 ;;; Enable helm-gtags-mode
@@ -318,10 +352,37 @@ If there is more than one, they won't work right.
  helm-gtags-prefix-key "\C-cg"
  helm-gtags-suggested-key-mapping t
  )
+#+END_SRC
+* Shells
+#+BEGIN_SRC emacs-lisp
+;; aweshell                      ;;
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/aweshell"))
+(require 'aweshell)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LSP
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/multi-term"))
+(require 'multi-term)
+#+END_SRC
+** multi-term helper functions
+The plain old ‘term’ command never creates a new term buffer, if one already exists. On the other hand, ‘multi-term’ always creates a new one. Both behaviors are limiting when it comes to keybindings. For most of the time, when a user presses a button to get himself a terminal, he expects one he was working with before (otherwise he would probably close it earlier), but sometimes he wants a fresh new one. The following code either switches to the term buffer used last or creates a new one, if a term buffer is already selected.
+#+BEGIN_SRC emacs-lisp
+(defun last-term-buffer (l)
+      "Return most recently used term buffer."
+      (when l
+  (if (eq 'term-mode (with-current-buffer (car l) major-mode))
+      (car l) (last-term-buffer (cdr l)))))
+
+    (defun get-term ()
+      "Switch to the term buffer last used, or create a new one if
+    none exists, or if the current buffer is already a term."
+      (interactive)
+      (let ((b (last-term-buffer (buffer-list))))
+  (if (or (not b) (eq 'term-mode major-mode))
+      (multi-term)
+    (switch-to-buffer b))))
+#+END_SRC
+* IDE tools
+** LSP-mode
+#+BEGIN_SRC emacs-lisp
 (use-package lsp-mode
        :hook
        ((c++-mode c-mode rust-mode go-mode csharp-mode python-mode cmake-mode) . lsp)
@@ -337,7 +398,8 @@ If there is more than one, they won't work right.
        (lsp-ui-doc-position 'top))
 (use-package company-lsp)
 (use-package helm-lsp)
-(use-package lsp-treemacs)
+(use-package lsp-treemacs
+       :after lsp-mode)
 (use-package dap-mode
        :config
        (require 'dap-gdb-lldb)
@@ -356,10 +418,9 @@ If there is more than one, they won't work right.
        (treemacs)
        (lsp-treemacs-symbols)
        (lsp-treemacs-errors-list))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; IDE tools
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+** Project management
+#+BEGIN_SRC emacs-lisp
 (use-package projectile
     :ensure t
     :config (projectile-global-mode)
@@ -371,6 +432,9 @@ If there is more than one, they won't work right.
     :bind (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
           (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 )
+#+END_SRC
+** UI extras
+#+BEGIN_SRC emacs-lisp
 ;; sr-speedbar
 (add-hook 'c-mode-hook 'sr-speedbar-open)
 (add-hook 'c++-mode-hook 'sr-speedbar-open)
@@ -383,7 +447,10 @@ If there is more than one, they won't work right.
 (fa-config-default)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)) ;; Put c++-mode as default for *.h files (improves parsing):
 (set-default 'semantic-case-fold t) ;; case-insensitive enabled
-
+#+END_SRC
+** GTAGS
+Included as a fallback in case clangd refuses to work.
+#+BEGIN_SRC emacs-lisp
 ;;(require 'helm-gtags)
 ;; Enable helm-gtags-mode
 ;;(add-hook 'dired-mode-hook 'helm-gtags-mode)
@@ -398,6 +465,9 @@ If there is more than one, they won't work right.
 ;;(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
 ;;(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 ;;(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+#+END_SRC
+** CMake
+#+BEGIN_SRC emacs-lisp
 (use-package cmake-mode
   :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'"))
 (use-package cmake-font-lock
@@ -421,10 +491,9 @@ If there is more than one, they won't work right.
   :bind ([remap comment-region] . cmake-ide-compile)
   :init (cmake-ide-setup)
   :config (advice-add 'cmake-ide-compile :after #'my/switch-to-compilation-window))
-
-;;::::::::::::::::::::::::::::::::::
-;; Language-specific settings
-;;::::::::::::::::::::::::::::::::::
+#+END_SRC
+** C/C++
+#+BEGIN_SRC emacs-lisp
 (setq c-default-style "linux"
           c-basic-offset 4)
 
@@ -434,10 +503,22 @@ If there is more than one, they won't work right.
  gdb-show-main t ;; Non-nil means display source file containing the main routine at startup
  )
 ;; NB! To use gdb-many-windows, you must always supply the -i=mi argument to gdb,
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LaTex                            ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+** Python
+#+BEGIN_SRC emacs-lisp
+(use-package ein
+    :ensure t
+    )
+(use-package lsp-python-ms
+  :ensure t
+  :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp))))  ; or lsp-deferred
+#+END_SRC
+* Typesetting
+** LaTex
+#+BEGIN_SRC emacs-lisp
 (use-package tex
   :ensure auctex
   :defer t
@@ -461,15 +542,4 @@ If there is more than one, they won't work right.
   :config
   (when (version< emacs-version "26")
     (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; python                                              ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package ein
-    :ensure t
-    )
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable))
 #+END_SRC

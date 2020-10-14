@@ -2,6 +2,8 @@
 (setq user-mail-adress "mihail.rodin.98@gmail.com")
 
 (custom-set-variables
+'(term-default-bg-color "#000000")        ;; background color (black)
+     '(term-default-fg-color "#dddd00")       ;; foreground color (yellow)
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -135,9 +137,9 @@
 (setq search-highlight        t)
 (setq query-replace-highlight t)
 
-(use-package treemacs
-    :ensure t
-)
+;;(use-package treemacs
+    ;;:ensure t
+;;)
 (global-set-key (kbd "C-x t t") 'treemacs)
 (use-package which-key  ;; show keybindings
     :ensure t
@@ -155,6 +157,23 @@
 (load "~/.emacs.d/org-insert-source-block.el") ;; custom function
 (eval-after-load 'org-mode
                     '(define-key org-mode-map [(C-s)] 'org-insert-source-block))
+
+;; Run/highlight code using babel in org-mode
+(use-package ob-ipython
+    :ensure t
+)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (python . t)
+   (shell . t)
+   (ipython . t)
+   ;; Include other languages here...
+   ))
+;; Syntax highlight in #+BEGIN_SRC blocks
+(setq org-src-fontify-natively t)
+;; Don't prompt before running code in org
+(setq org-confirm-babel-evaluate nil)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; Line wrapping
@@ -222,6 +241,7 @@
     ;;(setq sp-hybrid-kill-entire-symbol nil)
     ;;(sp-use-paredit-bindings)
 ;;)
+
 (use-package company
        :hook (prog-mode . company-mode)
        :custom
@@ -236,12 +256,21 @@
        (company-show-numbers t)
        (company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
        ;;(company-backends '(company-capf)))
-       (setq company-backends
-        '((company-files          ; files & directory
-           company-keywords       ; keywords
-           company-capf)  ; completion-at-point-functions
-          (company-abbrev company-dabbrev)
-          ))
+       ;;(setq company-backends
+        ;;'((company-files          ; files & directory
+           ;;company-keywords       ; keywords
+           ;;company-capf)  ; completion-at-point-functions
+          ;;(company-abbrev company-dabbrev)
+          ;;))
+        :init
+        (setq company-backends
+          '((company-files
+             company-keywords
+             company-capf
+             company-dabbrev-code
+             company-etags
+             company-dabbrev))
+        )
 (use-package company-posframe
     :ensure t
        :config
@@ -249,20 +278,16 @@
        :custom
        (company-posframe-quickhelp-delay nil))
 (use-package company-try-hard
-    :straight t
+    :ensure t
     :bind
     (("C-<tab>" . company-try-hard)
      :map company-active-map
      ("C-<tab>" . company-try-hard)))
 (use-package company-quickhelp
-    :straight t
+    :ensure t
     :config
     (company-quickhelp-mode))
 )
-
-;; aweshell                      ;;
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/aweshell"))
-(require 'aweshell)
 
 (require 'setup-helm)
 (require 'helm-gtags)
@@ -279,6 +304,28 @@
  helm-gtags-suggested-key-mapping t
  )
 
+;; aweshell                      ;;
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/aweshell"))
+(require 'aweshell)
+
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/multi-term"))
+(require 'multi-term)
+
+(defun last-term-buffer (l)
+      "Return most recently used term buffer."
+      (when l
+  (if (eq 'term-mode (with-current-buffer (car l) major-mode))
+      (car l) (last-term-buffer (cdr l)))))
+
+    (defun get-term ()
+      "Switch to the term buffer last used, or create a new one if
+    none exists, or if the current buffer is already a term."
+      (interactive)
+      (let ((b (last-term-buffer (buffer-list))))
+  (if (or (not b) (eq 'term-mode major-mode))
+      (multi-term)
+    (switch-to-buffer b))))
+
 (use-package lsp-mode
        :hook
        ((c++-mode c-mode rust-mode go-mode csharp-mode python-mode cmake-mode) . lsp)
@@ -294,7 +341,8 @@
        (lsp-ui-doc-position 'top))
 (use-package company-lsp)
 (use-package helm-lsp)
-(use-package lsp-treemacs)
+(use-package lsp-treemacs
+       :after lsp-mode)
 (use-package dap-mode
        :config
        (require 'dap-gdb-lldb)
@@ -391,10 +439,12 @@
 (use-package ein
     :ensure t
     )
-(use-package elpy
+(use-package lsp-python-ms
   :ensure t
-  :init
-  (elpy-enable))
+  :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp))))  ; or lsp-deferred
 
 (use-package tex
   :ensure auctex
